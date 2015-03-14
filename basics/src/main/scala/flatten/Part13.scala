@@ -4,6 +4,7 @@ import scalaz.OptionT
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 import scalaz.contrib.std.futureInstance
+import scalaz.Scalaz._
 
 /*
  * If you skipped parts 8 - 12, welcome back!
@@ -47,4 +48,11 @@ trait Part13 {
   // 2) Put all `Option[Future[A]]` into an Option Transformer, OptionT.
 
   // Exercise: Make a for-comprehension
+  for {
+    username <- getUserName(data) |> Future.successful |> OptionT.apply
+    user <- getUser(username) |> OptionT.apply
+    email = getEmail(user)
+    validated <- validateEmail(email) |> Future.successful |> OptionT.apply
+    success <- sendEmail(email) |> OptionT.apply
+  } yield success
 }
