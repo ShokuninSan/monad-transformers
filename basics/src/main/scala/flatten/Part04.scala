@@ -38,5 +38,12 @@ trait Part04 {
   // 'downgrade' the \/ values to Option. There's a 'toOption' method on \/ for that.
 
   // Bonus exercise: write the program again, but now downgrading \/ to Option.
+  for {
+    username <- getUserName(data).toOption
+    user <- getUser(username)
+    email = getEmail(user)
+    validated <- validateEmail(email)
+    success <- sendEmail(email).toOption
+  } yield success
 
 }
